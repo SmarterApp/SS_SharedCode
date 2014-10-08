@@ -13,9 +13,9 @@
 	</parent>
 
     <scm>
-        <connection>scm:hg:https://bitbucket.org/sbacoss/sharedcode</connection>
-        <developerConnection>scm:hg:https://bitbucket.org/sbacoss/sharedcode</developerConnection>
-        <url>https://bitbucket.org/sbacoss/sharedcode</url>
+        <connection>scm:hg:https://bitbucket.org/sbacoss/sharedcode_release</connection>
+        <developerConnection>scm:hg:https://bitbucket.org/sbacoss/sharedcode_release</developerConnection>
+        <url>https://bitbucket.org/sbacoss/sharedcode_release</url>
     </scm>
 
     <prerequisites>

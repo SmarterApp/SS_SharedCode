@@ -7,7 +7,7 @@ This project is licensed under the [AIR Open Source License v1.0](http://www.sma
 ## Getting Involved ##
 We would be happy to receive feedback on its capabilities, problems, or future enhancements:
 
-* For general questions or discussions, please use the [Forum](forum_link_here).
+* For general questions or discussions, please use the [Forum](http://forum.opentestsystem.org/viewforum.php?f=16).
 * Use the **Issues** link to file bugs or enhancement requests.
 * Feel free to **Fork** this project and develop your changes!
 
@@ -22,10 +22,10 @@ To use the shared logback configuration, a project with sb11-shared-code.jar dep
 		<include resource="logback-included-common-config.xml" />
 	</configuration>
 
-* "app.context.name" -- this value will be the context name used for both the folder name in which logfiles are created and the filename prefix
-* "app.base.package.name" -- property definition for package name prefix to observe, assumed that application's packages share same base name
-* "app.base.package.loglevel" -- desired logging level for observed package name prefix
-* "logback-included-common-config.xml" -- name of the shared logback configuration residing in the sb11-shared-code.jar
+* `"app.context.name"` -- this value will be the context name used for both the folder name in which logfiles are created and the filename prefix
+* `"app.base.package.name"` -- property definition for package name prefix to observe, assumed that application's packages share same base name
+* `"app.base.package.loglevel"` -- desired logging level for observed package name prefix
+* `"logback-included-common-config.xml"` -- name of the shared logback configuration residing in the sb11-shared-code.jar
 
 
 Shared Web Build Info Configuration
