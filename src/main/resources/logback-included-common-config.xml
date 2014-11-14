@@ -60,27 +60,16 @@
         </then>
     </if>
 
-    <logger name="${app.base.package.name:-org.opentestsystem.shared}" level="${app.base.package.loglevel:-debug}" />
+    <logger name="${app.base.package.name:-org.opentestsystem}" level="${app.base.package.loglevel:-debug}" />
     <logger name="org.springframework.data" level="info" />
     <logger name="org.springframework.core" level="info" />
     <logger name="org.springframework.beans" level="info" />
     <logger name="org.springframework.context" level="info" />
     <logger name="org.springframework.web" level="info" />
+    <logger name="org.springframework.security.saml" level="debug" />
 
     <!-- Performance loggers -->
-    <logger name="PERFORMANCE_CONTROLLER" additivity="false" level="debug">
-        <appender-ref ref="MDCAppender" />
-    </logger>
-
     <logger name="PERFORMANCE_REST" additivity="false" level="debug">
-        <appender-ref ref="MDCAppender" />
-    </logger>
-
-    <logger name="PERFORMANCE_PERSISTENCE" additivity="false" level="debug">
-        <appender-ref ref="MDCAppender" />
-    </logger>
-
-    <logger name="PERFORMANCE_SERVICE" additivity="false" level="debug">
         <appender-ref ref="MDCAppender" />
     </logger>
 
