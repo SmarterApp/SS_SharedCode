@@ -13,9 +13,9 @@
 	</parent>
 
     <scm>
-        <connection>scm:hg:https://bitbucket.org/sbacoss/sharedcode_release</connection>
-        <developerConnection>scm:hg:https://bitbucket.org/sbacoss/sharedcode_release</developerConnection>
-        <url>https://bitbucket.org/sbacoss/sharedcode_release</url>
+        <connection>scm:git:https://github.com/SmarterApp/SharedCode</connection>
+        <developerConnection>scm:git:https://github.com/SmarterApp/SharedCode</developerConnection>
+        <url>https://github.com/SmarterApp/SharedCode</url>
     </scm>
 
     <prerequisites>
