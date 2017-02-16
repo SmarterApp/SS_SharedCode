@@ -54,6 +54,17 @@
         </encoder>
     </appender>
 
+    <if condition='isDefined("logstash.destination")'>
+        <then>
+            <appender name="stash" class="net.logstash.logback.appender.LogstashTcpSocketAppender">
+                <destination>${logstash.destination}</destination>
+
+                <!-- encoder is required -->
+                <encoder class="net.logstash.logback.encoder.LogstashEncoder" />
+            </appender>
+        </then>
+    </if>
+
     <if condition='property("mnaAppenderActive").contains("true")'>
         <then>
             <appender name="monitoringAndAlertingLogAppender" class="org.opentestsystem.shared.mna.client.logging.MonitoringAlertingAppender"/>
@@ -76,7 +87,13 @@
     <root level="INFO">
     
         <appender-ref ref="filelog" />
-    
+
+        <if condition='isDefined("logstash.destination")'>
+            <then>
+                <appender-ref ref="stash" />
+            </then>
+        </if>
+
         <if condition='property("stdout.appender.active").contains("true")'>
             <then>
                 <appender-ref ref="STDOUT" />
