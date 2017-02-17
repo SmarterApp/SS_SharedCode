@@ -54,10 +54,10 @@
         </encoder>
     </appender>
 
-    <if condition='isDefined("logstash.destination")'>
+    <if condition='isDefined("LOGSTASH_DESTINATION")'>
         <then>
             <appender name="stash" class="net.logstash.logback.appender.LogstashTcpSocketAppender">
-                <destination>${logstash.destination}</destination>
+                <destination>${LOGSTASH_DESTINATION}</destination>
 
                 <!-- encoder is required -->
                 <encoder class="net.logstash.logback.encoder.LogstashEncoder" />
