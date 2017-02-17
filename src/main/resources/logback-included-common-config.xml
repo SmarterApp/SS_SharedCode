@@ -88,7 +88,7 @@
     
         <appender-ref ref="filelog" />
 
-        <if condition='isDefined("logstash.destination")'>
+        <if condition='isDefined("LOGSTASH_DESTINATION")'>
             <then>
                 <appender-ref ref="stash" />
             </then>
