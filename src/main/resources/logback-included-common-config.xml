@@ -1,16 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <included>
-
-    <if condition='property("spring.profiles.active").contains("mna.client.integration")'>
-        <then>
-            <property scope="local" name="mnaAppenderActive" value="${mna.appender.active:-false}" />
-        </then>
-        <else>
-            <property scope="local" name="mnaAppenderActive" value="false" />
-        </else>    
-    </if>
-    
     <if condition='property("stdout.appender.active").contains("true")'>
         <then>
             <property scope="local" name="stdout.appender.active" value="${stdout.appender.active:-false}" />
@@ -30,13 +20,6 @@
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
         <!-- encoders are assigned the type ch.qos.logback.classic.encoder.PatternLayoutEncoder by default -->
         <encoder>
-            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
-        </encoder>
-    </appender>
-
-    <appender name="MDCAppender" class="ch.qos.logback.core.ConsoleAppender">
-        <encoder>
-            <!--<pattern>%d{HH:mm:ss.SSS} [%X{request.id},%X{request.context},%X{request.user}] %-5level %logger{36} - %msg%n</pattern>-->
             <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
         </encoder>
     </appender>
@@ -65,27 +48,9 @@
         </then>
     </if>
 
-    <if condition='property("mnaAppenderActive").contains("true")'>
-        <then>
-            <appender name="monitoringAndAlertingLogAppender" class="org.opentestsystem.shared.mna.client.logging.MonitoringAlertingAppender"/>
-        </then>
-    </if>
+    <logger name="org.opentestsystem.delivery.logging.EventLogger" level="INFO" />
 
-    <logger name="${app.base.package.name:-org.opentestsystem}" level="${app.base.package.loglevel:-debug}" />
-    <logger name="org.springframework.data" level="info" />
-    <logger name="org.springframework.core" level="info" />
-    <logger name="org.springframework.beans" level="info" />
-    <logger name="org.springframework.context" level="info" />
-    <logger name="org.springframework.web" level="info" />
-    <logger name="org.springframework.security.saml" level="debug" />
-
-    <!-- Performance loggers -->
-    <logger name="PERFORMANCE_REST" additivity="false" level="debug">
-        <appender-ref ref="MDCAppender" />
-    </logger>
-
-    <root level="INFO">
-    
+    <root level="WARN">
         <appender-ref ref="filelog" />
 
         <if condition='isDefined("LOGSTASH_DESTINATION")'>
@@ -97,12 +62,6 @@
         <if condition='property("stdout.appender.active").contains("true")'>
             <then>
                 <appender-ref ref="STDOUT" />
-            </then>
-        </if>
-        
-        <if condition='property("mnaAppenderActive").contains("true")'>
-            <then>
-                <appender-ref ref="monitoringAndAlertingLogAppender" />
             </then>
         </if>
     </root>
