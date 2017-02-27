@@ -37,25 +37,42 @@
         </encoder>
     </appender>
 
+    <!-- log warnings and errors to logstash -->
     <if condition='isDefined("LOGSTASH_DESTINATION")'>
         <then>
-            <appender name="stash" class="net.logstash.logback.appender.LogstashTcpSocketAppender">
+            <appender name="stash-warn" class="net.logstash.logback.appender.LogstashTcpSocketAppender">
                 <destination>${LOGSTASH_DESTINATION}</destination>
 
                 <!-- encoder is required -->
                 <encoder class="net.logstash.logback.encoder.LogstashEncoder" />
+
+                <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+                    <level>WARN</level>
+                </filter>
             </appender>
         </then>
     </if>
 
-    <logger name="org.opentestsystem.delivery.logging.EventLogger" level="INFO" />
+    <!-- log specific info events to logstash -->
+    <logger name="org.opentestsystem.delivery.logging.EventLogger" level="INFO">
+        <if condition='isDefined("LOGSTASH_DESTINATION")'>
+            <then>
+                <appender name="stash-event" class="net.logstash.logback.appender.LogstashTcpSocketAppender">
+                    <destination>${LOGSTASH_DESTINATION}</destination>
 
-    <root level="WARN">
+                    <!-- encoder is required -->
+                    <encoder class="net.logstash.logback.encoder.LogstashEncoder" />
+                </appender>
+            </then>
+        </if>
+    </logger>
+
+    <root level="INFO">
         <appender-ref ref="filelog" />
 
         <if condition='isDefined("LOGSTASH_DESTINATION")'>
             <then>
-                <appender-ref ref="stash" />
+                <appender-ref ref="stash-warn" />
             </then>
         </if>
 
