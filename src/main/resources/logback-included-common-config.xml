@@ -1,16 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <included>
-
-    <if condition='property("spring.profiles.active").contains("mna.client.integration")'>
-        <then>
-            <property scope="local" name="mnaAppenderActive" value="${mna.appender.active:-false}" />
-        </then>
-        <else>
-            <property scope="local" name="mnaAppenderActive" value="false" />
-        </else>    
-    </if>
-    
     <if condition='property("stdout.appender.active").contains("true")'>
         <then>
             <property scope="local" name="stdout.appender.active" value="${stdout.appender.active:-false}" />
@@ -34,13 +24,6 @@
         </encoder>
     </appender>
 
-    <appender name="MDCAppender" class="ch.qos.logback.core.ConsoleAppender">
-        <encoder>
-            <!--<pattern>%d{HH:mm:ss.SSS} [%X{request.id},%X{request.context},%X{request.user}] %-5level %logger{36} - %msg%n</pattern>-->
-            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
-        </encoder>
-    </appender>
-
     <appender name="filelog" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <file>${logfile.directory}/${CONTEXT_NAME}.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
@@ -54,55 +37,48 @@
         </encoder>
     </appender>
 
+    <!-- log warnings and errors to logstash -->
     <if condition='isDefined("LOGSTASH_DESTINATION")'>
         <then>
-            <appender name="stash" class="net.logstash.logback.appender.LogstashTcpSocketAppender">
+            <appender name="stash-warn" class="net.logstash.logback.appender.LogstashTcpSocketAppender">
                 <destination>${LOGSTASH_DESTINATION}</destination>
 
                 <!-- encoder is required -->
                 <encoder class="net.logstash.logback.encoder.LogstashEncoder" />
+
+                <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+                    <level>WARN</level>
+                </filter>
             </appender>
         </then>
     </if>
 
-    <if condition='property("mnaAppenderActive").contains("true")'>
-        <then>
-            <appender name="monitoringAndAlertingLogAppender" class="org.opentestsystem.shared.mna.client.logging.MonitoringAlertingAppender"/>
-        </then>
-    </if>
+    <!-- log specific info events to logstash -->
+    <logger name="org.opentestsystem.delivery.logging.EventLogger" level="INFO">
+        <if condition='isDefined("LOGSTASH_DESTINATION")'>
+            <then>
+                <appender name="stash-event" class="net.logstash.logback.appender.LogstashTcpSocketAppender">
+                    <destination>${LOGSTASH_DESTINATION}</destination>
 
-    <logger name="${app.base.package.name:-org.opentestsystem}" level="${app.base.package.loglevel:-debug}" />
-    <logger name="org.springframework.data" level="info" />
-    <logger name="org.springframework.core" level="info" />
-    <logger name="org.springframework.beans" level="info" />
-    <logger name="org.springframework.context" level="info" />
-    <logger name="org.springframework.web" level="info" />
-    <logger name="org.springframework.security.saml" level="debug" />
-
-    <!-- Performance loggers -->
-    <logger name="PERFORMANCE_REST" additivity="false" level="debug">
-        <appender-ref ref="MDCAppender" />
+                    <!-- encoder is required -->
+                    <encoder class="net.logstash.logback.encoder.LogstashEncoder" />
+                </appender>
+            </then>
+        </if>
     </logger>
 
     <root level="INFO">
-    
         <appender-ref ref="filelog" />
 
         <if condition='isDefined("LOGSTASH_DESTINATION")'>
             <then>
-                <appender-ref ref="stash" />
+                <appender-ref ref="stash-warn" />
             </then>
         </if>
 
         <if condition='property("stdout.appender.active").contains("true")'>
             <then>
                 <appender-ref ref="STDOUT" />
-            </then>
-        </if>
-        
-        <if condition='property("mnaAppenderActive").contains("true")'>
-            <then>
-                <appender-ref ref="monitoringAndAlertingLogAppender" />
             </then>
         </if>
     </root>
