@@ -287,6 +287,13 @@
             <version>15.0</version>
         </dependency>
 
+		<dependency>
+			<groupId>com.google.auto.value</groupId>
+			<artifactId>auto-value</artifactId>
+			<version>1.2</version>
+			<scope>provided</scope>
+		</dependency>
+
 		<!-- test dependencies -->
 		<dependency>
 			<groupId>org.springframework</groupId>
