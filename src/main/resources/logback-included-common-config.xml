@@ -62,6 +62,12 @@
 
                     <!-- encoder is required -->
                     <encoder class="net.logstash.logback.encoder.LogstashEncoder" />
+
+                    <filter class="ch.qos.logback.classic.filter.LevelFilter">
+                        <level>INFO</level>
+                        <onMatch>ACCEPT</onMatch>
+                        <onMismatch>DENY</onMismatch>
+                    </filter>
                 </appender>
             </then>
         </if>
