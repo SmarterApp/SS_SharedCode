@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:rabbit="http://www.springframework.org/schema/rabbit"
+       xsi:schemaLocation="http://www.springframework.org/schema/rabbit
+           http://www.springframework.org/schema/rabbit/spring-rabbit.xsd
+           http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <rabbit:connection-factory id="connectionFactory" host="${rabbitmq.host}"
+                               username="${rabbitmq.username}" password="${rabbitmq.password}"
+                               virtual-host="${rabbitmq.vhost}"/>
+
+    <rabbit:admin connection-factory="connectionFactory" />
+    <rabbit:template id="rabbitTemplate" connection-factory="connectionFactory" />
+
+    <rabbit:queue id="springCloudBusQueue"  auto-delete="true" />
+    <bean id="listener" class="org.opentestsystem.delivery.logging.ConfigRefreshListener" />
+    <rabbit:listener-container  connection-factory="connectionFactory">
+        <rabbit:listener ref="listener" queues="springCloudBusQueue" />
+    </rabbit:listener-container>
+
+    <rabbit:topic-exchange name="springCloudBus">
+        <rabbit:bindings>
+            <rabbit:binding queue="springCloudBusQueue" pattern="#"/>
+        </rabbit:bindings>
+    </rabbit:topic-exchange>
+</beans>
