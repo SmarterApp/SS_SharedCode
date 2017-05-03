@@ -3,7 +3,7 @@
 
 	<name>Smarter Balanced Shared Code</name>
 	<artifactId>sb11-shared-code</artifactId>
-	<version>3.0.6-SNAPSHOT</version>
+	<version>3.0.7-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
 	<parent>
