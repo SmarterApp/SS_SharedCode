@@ -1,30 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <included>
-    <if condition='property("stdout.appender.active").contains("true")'>
-        <then>
-            <property scope="local" name="stdout.appender.active" value="${stdout.appender.active:-false}" />
-        </then>
-        <else>
-            <property scope="local" name="stdout.appender.active" value="false" />
-        </else>    
-    </if>
-    
     <property scope="local" name="logfile.path" value="${catalina.home:-${user.home}}" />
+
+    <jmxConfigurator/>
 
     <contextName>${app.context.name:-shared}</contextName>
     <property scope="local" name="logfile.directory" value="${logfile.path}/logs/${app.context.name:-shared}" />
 
-    <jmxConfigurator/>
-
-    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
         <!-- encoders are assigned the type ch.qos.logback.classic.encoder.PatternLayoutEncoder by default -->
         <encoder>
             <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
         </encoder>
     </appender>
 
-    <appender name="filelog" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <file>${logfile.directory}/${CONTEXT_NAME}.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <!-- daily rollover -->
@@ -32,61 +23,28 @@
             <maxHistory>28</maxHistory>
         </rollingPolicy>
         <encoder>
-            <!--<pattern>%d{HH:mm:ss.SSS} [%X{request.id},%X{request.context},%X{request.user}] %-5level %logger{36} - %msg%n</pattern>-->
             <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
         </encoder>
     </appender>
 
-    <!-- log warnings and errors to logstash -->
     <if condition='isDefined("LOGSTASH_DESTINATION")'>
         <then>
-            <appender name="stash-warn" class="net.logstash.logback.appender.LogstashTcpSocketAppender">
+            <appender name="LOGSTASH" class="net.logstash.logback.appender.LogstashTcpSocketAppender">
                 <destination>${LOGSTASH_DESTINATION}</destination>
-
                 <!-- encoder is required -->
-                <encoder class="net.logstash.logback.encoder.LogstashEncoder" />
-
-                <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
-                    <level>WARN</level>
-                </filter>
+                <encoder class="net.logstash.logback.encoder.LogstashEncoder"/>
             </appender>
         </then>
     </if>
 
-    <!-- log specific info events to logstash -->
-    <logger name="org.opentestsystem.delivery.logging.EventLogger" level="INFO">
-        <if condition='isDefined("LOGSTASH_DESTINATION")'>
-            <then>
-                <appender name="stash-event" class="net.logstash.logback.appender.LogstashTcpSocketAppender">
-                    <destination>${LOGSTASH_DESTINATION}</destination>
-
-                    <!-- encoder is required -->
-                    <encoder class="net.logstash.logback.encoder.LogstashEncoder" />
-
-                    <filter class="ch.qos.logback.classic.filter.LevelFilter">
-                        <level>INFO</level>
-                        <onMatch>ACCEPT</onMatch>
-                        <onMismatch>DENY</onMismatch>
-                    </filter>
-                </appender>
-            </then>
-        </if>
-    </logger>
-
     <root level="INFO">
-        <appender-ref ref="filelog" />
+        <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="FILE"/>
 
         <if condition='isDefined("LOGSTASH_DESTINATION")'>
             <then>
-                <appender-ref ref="stash-warn" />
-            </then>
-        </if>
-
-        <if condition='property("stdout.appender.active").contains("true")'>
-            <then>
-                <appender-ref ref="STDOUT" />
+                <appender-ref ref="LOGSTASH"/>
             </then>
         </if>
     </root>
-
 </included>
