@@ -35,7 +35,7 @@
                 <encoder class="net.logstash.logback.encoder.LogstashEncoder"/>
             </appender>
             <!-- send trace event logs to LOGSTASH but not to CONSOLE by default -->
-            <logger name="org.opentestsystem.delivery.logging" level="trace" additive="false">
+            <logger name="org.opentestsystem.delivery.logging" level="trace" additivity="false">
                 <appender-ref ref="LOGSTASH"/>
             </logger>
         </then>
