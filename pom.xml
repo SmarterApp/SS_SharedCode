@@ -9,7 +9,7 @@
 	<parent>
 		<groupId>org.opentestsystem.shared</groupId>
 		<artifactId>shared-build-parent</artifactId>
-		<version>3.1.0.RELEASE</version>
+		<version>3.1.1-SNAPSHOT</version>
 	</parent>
 
     <scm>
@@ -92,13 +92,6 @@
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-core</artifactId>
-			<version>${spring.version}</version>
-			<exclusions>
-				<exclusion>
-		          <groupId>commons-logging</groupId>
-		          <artifactId>commons-logging</artifactId>
-		        </exclusion>
-			</exclusions>
 		</dependency>
 
 		<dependency>
@@ -134,13 +127,6 @@
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-context</artifactId>
-			<version>${spring.version}</version>
-			<exclusions>
-				<exclusion>
-					<groupId>commons-logging</groupId>
-					<artifactId>commons-logging</artifactId>
-				</exclusion>
-			</exclusions>
 		</dependency>
         
         <dependency>
@@ -325,7 +311,6 @@
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
-			<version>${junit.version}</version>
 			<scope>test</scope>
 		</dependency>
 
